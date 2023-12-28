@@ -61,7 +61,6 @@ def train(training_config):
     dataloader_train = DataLoader(train_data , batch_size = training_config['batch_size'] , shuffle = True)
     dataloader_test  = DataLoader(test_data  , batch_size = training_config['batch_size'] , shuffle = False)
 
-    print(len(dataloader_test))
 
     '''
     optimizer
@@ -137,7 +136,8 @@ def train(training_config):
                     attention_mask = b_mask_tensor
                     )
 
-            loss = creterian(outputs.transpose(-2, -1), b_label_tensor)
+            loss = creterian(outputs.transpose(-2, -1), b_label_tensor).sum()
+
 
             loss.backward()
             optimizer.step()
@@ -216,12 +216,12 @@ def train(training_config):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
-    parser.add_argument("--num_of_epochs"    , type=int   , help="number of epochs"                                  , default=5)
-    parser.add_argument("--batch_size"       , type=int   , help="batch size"                                        , default=2)
+    parser.add_argument("--num_of_epochs"    , type=int   , help="number of epochs"                                  , default=20)
+    parser.add_argument("--batch_size"       , type=int   , help="batch size"                                        , default=256)
     parser.add_argument("--learning_rate"    , type=float , help="learning rate"                                     , default=1e-5)
     parser.add_argument("--num_labels"       , type=int   , help="number of different labels"                                        , default=6)
+    parser.add_argument("--sequence_length"  , type=int   , help="sequence_length"                                   , default=128)
     parser.add_argument("--model_path_dst"   , type=str   , help="the directory to save model"                       , default='./saved_models/')
     parser.add_argument("--model_path_src"   , type=str   , help="the directory to load model"                       , default='./saved_models/')
     parser.add_argument("--step_losses_pth"  , type=str   , help="the path of the json file that saves step losses"  , default='./trails/step_losses.json')
