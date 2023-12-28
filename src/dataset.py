@@ -11,7 +11,7 @@ import copy
 read the data from the corpus file
 and extract the (text, label) pairs
 
-labels: [PAD]:0, S:1  B:2  E:3  M:4 P:5
+labels:  S:0  B:1  E:2  M:3 P:4, [PAD]:0
 '''
 def get_text_labels(data_path, max_length):
     buffer = 16
@@ -44,9 +44,9 @@ def get_text_labels(data_path, max_length):
                         sentence_label = sentence_label + [5] * len(word_pair[0])
 
                     elif len(word_pair[0]) == 1:
-                        sentence_label.append(1)
+                        sentence_label.append(0)
                     else:
-                        sentence_label = sentence_label + [2] + [4] * (len(word_pair[0]) - 2) + [3]
+                        sentence_label = sentence_label + [1] + [3] * (len(word_pair[0]) - 2) + [2]
                         
 
                     if word_pair[1] == 'w' or len(sentence) > max_length - buffer:
@@ -90,7 +90,7 @@ class PKCorpus(Dataset):
         length_list = [len(lst) for lst in label_list]
 
         #  pad the labels
-        label_list = [label + [0] * (max_length - len(label)) for label in label_list]
+        label_list = [label + [5] * (max_length - len(label)) for label in label_list]
 
 
         tokenizer = BertTokenizer.from_pretrained("bert-base-chinese")
