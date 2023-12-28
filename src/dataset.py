@@ -41,7 +41,7 @@ def get_text_labels(data_path, max_length):
 
                     if word_pair[1] == 'w':
                     #  append the sentence to text
-                        sentence_label = sentence_label + [5] * len(word_pair[0])
+                        sentence_label = sentence_label + [4] * len(word_pair[0])
 
                     elif len(word_pair[0]) == 1:
                         sentence_label.append(0)
